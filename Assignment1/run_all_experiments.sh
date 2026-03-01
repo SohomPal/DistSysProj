@@ -52,7 +52,7 @@ run_test () {
 # PAYLOAD EXPERIMENTS
 ############################
 CLIENTS=10
-for PAYLOAD in 64 256 1024 4096
+for PAYLOAD in 64 256 1024 4096 8192
 do
     for PROTO in tcp udp
     do
@@ -64,7 +64,7 @@ done
 # CLIENT SCALING EXPERIMENTS
 ############################
 PAYLOAD=64
-for CLIENTS in 1 5 10 20
+for CLIENTS in 1 5 10 20 100 1000
 do
     for PROTO in tcp udp
     do
