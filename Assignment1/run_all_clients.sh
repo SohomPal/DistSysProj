@@ -1,8 +1,7 @@
 #!/bin/bash
 
-SERVER_IP="128.6.13.3"
-BASE_PORT=5001
-PORT=$BASE_PORT
+SERVER_IP="128.6.13.2"
+PORT=5001
 REQUESTS=100
 RESULTS_DIR="results"
 mkdir -p $RESULTS_DIR
@@ -13,7 +12,7 @@ run_client () {
     PAYLOAD=$3
     LABEL=$4
 
-    echo "CLIENT $PROTO | clients=$CLIENTS | payload=$PAYLOAD | port=$PORT"
+    echo "CLIENT $PROTO | clients=$CLIENTS | payload=$PAYLOAD"
 
     CLIENT_LOG="$RESULTS_DIR/client_${PROTO}_${LABEL}.jsonl"
 
@@ -25,8 +24,6 @@ run_client () {
         --requests $REQUESTS \
         --clients $CLIENTS \
         --log $CLIENT_LOG
-
-    PORT=$((PORT+1))
 }
 
 ################################
@@ -38,6 +35,7 @@ do
     for PROTO in tcp udp
     do
         run_client $PROTO $CLIENTS $PAYLOAD "payload${PAYLOAD}"
+        sleep 3
     done
 done
 
@@ -55,6 +53,7 @@ do
     for PROTO in tcp udp
     do
         run_client $PROTO $CLIENTS $PAYLOAD "clients${CLIENTS}"
+        sleep 3
     done
 done
 
