@@ -59,14 +59,12 @@ def parse_client_file(filepath):
         "throughput_mbps": throughput_mbps
     }
 
-# Parse only client files (RTT lives there)
 for filename in os.listdir(RESULTS_DIR):
     if filename.startswith("client_") and filename.endswith(".jsonl"):
         parsed = parse_client_file(os.path.join(RESULTS_DIR, filename))
         if parsed:
             rows.append(parsed)
 
-# Write CSV
 with open(OUTPUT_CSV, "w", newline="") as csvfile:
     writer = csv.DictWriter(csvfile,
         fieldnames=["proto","clients","payload",
@@ -76,7 +74,6 @@ with open(OUTPUT_CSV, "w", newline="") as csvfile:
 
 print("Generated CSV:", OUTPUT_CSV)
 
-# Separate datasets
 payload_rows = [r for r in rows if r["clients"] == 10]
 client_rows = [r for r in rows if r["payload"] == 64]
 

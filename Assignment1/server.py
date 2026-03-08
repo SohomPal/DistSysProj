@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-TCP/UDP echo server boilerplate.
-
-Implements a small benchmark server for CS417 Assignment 1:
-- TCP: accept `clients` connections; for each, echo `requests` payloads of size `payload_bytes`.
-- UDP: receive and echo `clients * requests` datagrams of size `payload_bytes` (best-effort).
-
-Logging format: JSON Lines (one JSON object per line) to the --log path.
-"""
 import argparse
 import json
 import os
@@ -16,7 +7,6 @@ import threading
 import time
 from typing import Optional
 
-##### Suggested helper functions; feel free to modify as needed. #####
 def now_wall() -> float:
     return time.time()
 
@@ -37,7 +27,6 @@ def recvall(sock: socket.socket, n: int) -> bytes:
         buf.extend(chunk)
     return bytes(buf)
 
-##### Required functions to implement. Do not change signatures. #####
 def run_tcp_server(bind: str, port: int, log_path: str,
                    payload_bytes: int, requests: int, clients: int) -> None:
     """Run the TCP server benchmark."""

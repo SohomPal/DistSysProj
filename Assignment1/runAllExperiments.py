@@ -2,9 +2,6 @@ import os
 import subprocess
 import time
 
-# -------------------------
-# Load .env
-# -------------------------
 def load_env():
     with open(".env") as f:
         for line in f:
@@ -27,9 +24,7 @@ clients_list = [1, 5, 10, 20, 50, 100, 200, 500]
 
 MAX_RETRIES = 2
 
-# -------------------------
-# SSH / SCP helpers
-# -------------------------
+
 def ssh_command(host, command):
     return subprocess.run(
         ["sshpass", "-p", PASSWORD,
@@ -54,9 +49,6 @@ def scp_download(host, remote_path, local_path):
          local_path]
     )
 
-# -------------------------
-# Setup remote machines
-# -------------------------
 def ensure_remote_file(host, filename):
     check_cmd = f"test -f {BASE_DIR}/{filename} && echo EXISTS || echo MISSING"
     result = ssh_command(host, check_cmd)
@@ -78,9 +70,6 @@ def setup_remote_machine(host):
     ensure_remote_file(host, "client.py")
     ensure_remote_file(host, "analysis.py")
 
-# -------------------------
-# Validate trial success
-# -------------------------
 def validate_trial(proto, clients, payload):
     label = f"{proto}_c{clients}_p{payload}"
     log_path = f"{BASE_DIR}/results/client_{label}.jsonl"
@@ -101,9 +90,6 @@ def delete_trial_logs(proto, clients, payload):
     ssh_command(SERVER_HOST, f"rm -f {BASE_DIR}/results/server_{label}.jsonl")
     ssh_command(CLIENT_HOST, f"rm -f {BASE_DIR}/results/client_{label}.jsonl")
 
-# -------------------------
-# Run single experiment
-# -------------------------
 def run_experiment(proto, clients, payload):
     label = f"{proto}_c{clients}_p{payload}"
     print(f"\nRunning {label}")
@@ -145,9 +131,7 @@ def run_experiment(proto, clients, payload):
 
     print(f"{label} permanently failed after retries.")
 
-# -------------------------
 # MAIN EXECUTION
-# -------------------------
 
 setup_remote_machine(SERVER_HOST)
 setup_remote_machine(CLIENT_HOST)

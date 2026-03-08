@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-TCP/UDP echo client boilerplate.
-
-Implements a small benchmark client for CS417 Assignment 1:
-- TCP work item: connect -> send N bytes -> recv N bytes (echo) -> disconnect
-- UDP work item: send N bytes -> recv N bytes (echo)
-
-Logging format: JSON Lines (one JSON object per line) to the --log path.
-"""
 import argparse
 import json
 import os
@@ -43,17 +34,14 @@ def build_payload(payload_bytes: int, client_id: int = 0, seq: int = 0, include_
         return b"A" * payload_bytes
     header = client_id.to_bytes(8, "big", signed=False) + seq.to_bytes(8, "big", signed=False)
     if payload_bytes < len(header):
-        # Should not happen with assignment defaults, but keep robust.
         return header[:payload_bytes]
     return header + (b"B" * (payload_bytes - len(header)))
 
-##### Required functions to implement. Do not change signatures. #####
 def run_tcp_client(host: str, port: int, log_path: str,
                    payload_bytes: int, requests: int, clients: int) -> None:
     """Run the TCP client benchmark."""
     os.makedirs(os.path.dirname(log_path) or ".", exist_ok=True)
 
-    # Aggregate counters across threads
     totals_lock = threading.Lock()
     total_req_ok = 0
     total_req_err = 0
@@ -201,7 +189,7 @@ def run_tcp_client(host: str, port: int, log_path: str,
             "total_bytes": total_bytes,
             "throughput_Bps": thr,
             "connections": clients,
-            "connect_times_s": conn_times,  # for later median/avg
+            "connect_times_s": conn_times,
         })
 
 def run_udp_client(host: str, port: int, log_path: str,
